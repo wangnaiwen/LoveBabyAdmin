@@ -22,11 +22,15 @@
         </activity>
         <activity android:name=".activity.AboutActivity"/>
         <activity android:name=".activity.SettingActivity"/>
-        <activity android:name=".activity.ManagerArticleActivity"/>
         <activity android:name=".activity.ReviewStoreActivity"/>
         <activity android:name=".activity.ManagerProductActivity"/>
         <activity android:name=".activity.SendOrderActivity"/>
         <activity android:name=".activity.OrderDetailActivity"/>
+        <activity android:name=".activity.ShopDetailActivity"/>
+        <activity android:name=".activity.ArticleActivity"/>
+        <activity android:name=".activity.InsertArticleActivity"/>
+        <activity android:name=".activity.ArticleDetailActivity"/>
+        <activity android:name=".activity.EditArticleActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />

@@ -84,9 +84,11 @@ public class FindAllArticleImp implements IFindAllArticles {
                     articles.add(article);
                 }
             }else {
+                articles = null;
                 Toast.makeText(context, "找不到", Toast.LENGTH_SHORT).show();
             }
         }catch (JSONException e){
+            articles = null;
             e.printStackTrace();
         }
         /**

@@ -5,7 +5,13 @@ package com.wnw.lovebabyadmin.config;
  */
 
 public class NetConfig {
-    public final static String SERVICE = "http://119.29.182.235:8080/babyTest/";
+    //public final static String SERVICE = "http://119.29.182.235:8080/babyTest/";
+    public final static String SERVICE = "http://119.29.40.196:8080/babyTest/";
+
+    public final static String IMAGE_PATH = "http://119.29.40.196:8080/babyTest";
+
+
+    public final static String IMAGE_UPLOAD = "http://119.29.40.196:8080/babyTest/upload";
 
     //Admin
     public final static String ADMIN_LOGIN = "adminLogin?";

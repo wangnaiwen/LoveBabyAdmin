@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.tv_manager_article:
-                Intent intent5 = new Intent(this, ManagerProductActivity.class);
+                Intent intent5 = new Intent(this, ArticleActivity.class);
                 startActivity(intent5);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;

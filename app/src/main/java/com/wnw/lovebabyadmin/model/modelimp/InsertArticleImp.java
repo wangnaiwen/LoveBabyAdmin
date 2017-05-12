@@ -43,18 +43,24 @@ public class InsertArticleImp implements IInsertArticle {
 
     private void sendRequestWithVolley(Article article){
 
+        String author = "";
+        String title = "";
         String content = "";
+        String coverImg = "";
         try {
+            author = URLEncoder.encode(article.getAuthor(), "UTF-8");
+            title = URLEncoder.encode(article.getTitle(), "UTF-8");
             content = URLEncoder.encode(article.getContent(), "UTF-8");
+            coverImg = URLEncoder.encode(article.getCoverImg(), "UTF-8");
         }catch (Exception e){
 
         }
 
         String url = NetConfig.SERVICE + NetConfig.INSERT_ARTICLE;
-        url = url + "author=" + article.getAuthor()
-        +"&title=" + article.getTitle()
+        url = url + "author=" + author
+        +"&title=" + title
         +"&content=" + content
-        +"&coverImg" + article.getCoverImg();
+        +"&coverImg=" + coverImg;
         Log.d("url",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
