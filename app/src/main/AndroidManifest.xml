@@ -23,7 +23,6 @@
         <activity android:name=".activity.AboutActivity"/>
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".activity.ReviewStoreActivity"/>
-        <activity android:name=".activity.ManagerProductActivity"/>
         <activity android:name=".activity.SendOrderActivity"/>
         <activity android:name=".activity.OrderDetailActivity"/>
         <activity android:name=".activity.ShopDetailActivity"/>
@@ -31,6 +30,13 @@
         <activity android:name=".activity.InsertArticleActivity"/>
         <activity android:name=".activity.ArticleDetailActivity"/>
         <activity android:name=".activity.EditArticleActivity"/>
+        <activity android:name=".activity.SortListActivity">
+
+        </activity>
+        <activity android:name=".activity.EditProductActivity"/>
+        <activity android:name=".activity.ProductListActivity"/>
+        <activity android:name=".activity.SearchGoodsActivity"/>
+        <activity android:name=".activity.SearchResultActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />

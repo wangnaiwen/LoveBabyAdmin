@@ -6,4 +6,23 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="bottom_text_size">10sp</dimen>
+    <dimen name="bottom_bar_height">48dp</dimen>
+    <dimen name="bottom_bar_width">50dp</dimen>
+    <dimen name="bottom_text_padding_top">30dp</dimen>
+    <dimen name="itemSize">140dp</dimen>
+    <dimen name="searchbar_height">50dp</dimen>
+    <dimen name="dot_width">5dp</dimen>
+    <dimen name="dot_height">5dp</dimen>
+    <dimen name="dot_left_margin">8dp</dimen>
+    <dimen name="padding_dp10">10dp</dimen>
+    <dimen name="height_dp80">80dp</dimen>
+    <dimen name="viewpager_height">160dp</dimen>
+    <dimen name="homepage_menu_height">60dp</dimen>
+    <dimen name="homepage_menu_icon_width">40dp</dimen>
+    <dimen name="homepage_menu_icon_height">40dp</dimen>
+    <dimen name="homepage_menu_text_width">40dp</dimen>
+    <dimen name="homepage_menu_text_height">20dp</dimen>
+    <dimen name="homepage_menu_text_size">12sp</dimen>
+    <dimen name="sort_list_gv_item_size">70dp</dimen>
 </resources>

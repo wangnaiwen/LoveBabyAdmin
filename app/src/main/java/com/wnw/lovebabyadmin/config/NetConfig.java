@@ -90,6 +90,9 @@ public class NetConfig {
     public final static String FIND_PRODUCT_BY_ID = "findProductById?";
     public final static String FIND_PRODUCT_BY_SC_ID = "findProductByScId?";
     public final static String FIND_PRODUCT_BY_KEY = "findProductByKey?";
+    public final static String FIND_PRODUCT_BY_KEYWORD = "findProductByKeyword?";
+    public final static String UPDATE_PRODUCT = "updateProduct?";
+    public final static String INSERT_PRODUCT = "insertProduct?";
 
     //pr
     public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";
@@ -100,10 +103,14 @@ public class NetConfig {
     //mc
     public final static String FIND_MC_BY_ID = "findMcById?";
     public final static String FIND_MCS = "findMcs?";
+    public final static String INSERT_MC = "insertMc?";
+    public final static String UPDATE_MC = "updateMc?";
 
     //sc
     public final static String FIND_SC_BY_ID = "findScById?";
     public final static String FIND_SC_BY_MC_ID = "findScByMcId?";
+    public final static String INSERT_SC = "insertSc?";
+    public final static String UPDATE_SC = "updateSc?";
 
     //hot sale
     public final static String FIND_HOT_SALE = "findHotSale?";
