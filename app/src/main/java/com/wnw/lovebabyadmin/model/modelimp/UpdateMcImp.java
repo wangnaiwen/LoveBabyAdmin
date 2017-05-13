@@ -50,7 +50,7 @@ public class UpdateMcImp implements IUpdateMc{
         }
 
         String url = NetConfig.SERVICE + NetConfig.UPDATE_MC;
-        url = url + "name=" + name;
+        url = url +"id="+ mc.getId()+ "&name=" + name;
         Log.d("url",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

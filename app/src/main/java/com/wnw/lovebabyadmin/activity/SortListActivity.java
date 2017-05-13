@@ -1,14 +1,18 @@
 package com.wnw.lovebabyadmin.activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -23,8 +27,12 @@ import com.wnw.lovebabyadmin.fragment.SortListFragment;
 import com.wnw.lovebabyadmin.net.NetUtil;
 import com.wnw.lovebabyadmin.presenter.FindMcsPresenter;
 import com.wnw.lovebabyadmin.presenter.FindScByMcIdPresenter;
+import com.wnw.lovebabyadmin.presenter.InsertMcPresenter;
+import com.wnw.lovebabyadmin.presenter.UpdateMcPresenter;
 import com.wnw.lovebabyadmin.view.IFindMcsVIew;
 import com.wnw.lovebabyadmin.view.IFindScByMcIdView;
+import com.wnw.lovebabyadmin.view.IInsertMcView;
+import com.wnw.lovebabyadmin.view.IUpdateMcView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +44,8 @@ import java.util.Map;
  */
 
 public class SortListActivity extends AppCompatActivity implements View.OnClickListener,
-        AdapterView.OnItemClickListener, IFindMcsVIew, IFindScByMcIdView {
+        AdapterView.OnItemClickListener, IFindMcsVIew, IFindScByMcIdView,
+        AdapterView.OnItemLongClickListener, IUpdateMcView , IInsertMcView{
 
     private RelativeLayout searchBar;
     private LinearLayout normalView;
@@ -50,6 +59,8 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
 
     private FindMcsPresenter findMcsPresenter;
     private FindScByMcIdPresenter findScByMcIdPresenter;
+    private UpdateMcPresenter updateMcPresenter;
+    private InsertMcPresenter insertMcPresenter;
 
     private List<SortListFragment> fragmentList = new ArrayList<>();
 
@@ -70,6 +81,7 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
         getMenuInflater().inflate(R.menu.product, menu);
         return true;
     }
+
     //菜单选中监听
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -84,7 +96,7 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
 
             return true;
         }else if (id == R.id.action_add_mc) {
-
+            showInsertMcDialog();
             return true;
         }else if (id == R.id.action_add_sc) {
 
@@ -103,11 +115,14 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
         sortListLv.setDivider(null);
         sortListLv.setOnItemClickListener(this);
         noSortTv.setOnClickListener(this);
+        sortListLv.setOnItemLongClickListener(this);
     }
 
     private void initPresenter(){
         findMcsPresenter = new FindMcsPresenter(this,this);
         findScByMcIdPresenter = new FindScByMcIdPresenter(this,this);
+        updateMcPresenter = new UpdateMcPresenter(this,this);
+        insertMcPresenter = new InsertMcPresenter(this,this);
     }
 
     private void startFindMcs(){
@@ -146,14 +161,19 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
         dialog.show();
     }
 
-    private void setAdapter(){
-        sortListAdapter = new SortListAdapter(this, mcList);
-        sortListLv.setAdapter(sortListAdapter);
-    }
-
     private void dismissDialogs(){
         if (dialog.isShowing()){
             dialog.dismiss();
+        }
+    }
+
+    private void setAdapter(){
+        if (sortListAdapter == null){
+            sortListAdapter = new SortListAdapter(this, mcList);
+            sortListLv.setAdapter(sortListAdapter);
+        }else {
+            sortListAdapter.setMcList(mcList);
+            sortListAdapter.notifyDataSetChanged();
         }
     }
 
@@ -179,7 +199,7 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
         }else {
             map.put(mcList.get(pos), scs);
         }
-
+        Log.d("wnw", pos+" " + mcList.size());
         pos ++;
         if (pos == mcList.size()){
             //全部数据都加载完成
@@ -190,6 +210,88 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
         }else {
             startFindScByMcId();
         }
+    }
+
+    private void startUpdateMc(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "网络异常", Toast.LENGTH_SHORT).show();
+        }else {
+            Mc mc = new Mc();
+            mc.setId(mcList.get(position).getId());
+            if (name.equals("")){
+                Toast.makeText(this, "名字不能为空", Toast.LENGTH_SHORT).show();
+            }else {
+                mc.setName(name);
+                updateMcPresenter.updateMc(mc);
+            }
+        }
+    }
+
+    //更新名字返回的结果
+    @Override
+    public void showUpdateMcResult(boolean isSuccess) {
+        dismissDialogs();
+        if (isSuccess){
+            Toast.makeText(this, "名字更新成功", Toast.LENGTH_SHORT).show();
+            mcList.get(position).setName(name);
+            sortListAdapter.setMcList(mcList);
+            sortListAdapter.notifyDataSetChanged();
+        }else {
+            Toast.makeText(this, "名字更新失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String name1;
+    private void startInsertMc(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+            Toast.makeText(this, "网络异常", Toast.LENGTH_SHORT).show();
+        }else {
+            Mc mc = new Mc();
+            mc.setName(name1);
+            insertMcPresenter.insertMc(mc);
+        }
+    }
+
+    //插入主类返回的数据
+    @Override
+    public void showInsertMcResult(boolean isSuccess) {
+        dismissDialogs();
+        if (isSuccess){
+            Toast.makeText(this, "插入主类成功", Toast.LENGTH_SHORT).show();
+            reFindMcs();
+        }else {
+            Toast.makeText(this, "插入主类失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void reFindMcs(){
+        //在这里重新加载当前页面
+        mcList.clear();
+        map.clear();
+        pos = 0;
+        mPosition = 0;
+        fragmentList.clear();
+        startFindMcs();
+    }
+
+    private void showInsertMcDialog(){
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_rename, null);
+        final EditText editText = (EditText)view.findViewById(R.id.dialog_rename);
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("插入主类")
+                .setView(view)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        name1 = editText.getText().toString().trim();
+                        if (name1.isEmpty()){
+                            Toast.makeText(SortListActivity.this, "主类名不能为空", Toast.LENGTH_SHORT).show();
+                        }else {
+                            startInsertMc();
+                        }
+                    }
+                }).create();
+        alertDialog.show();
     }
 
     private void initFragmentList(){
@@ -212,6 +314,37 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
                 break;
         }
+    }
+
+    private int position;
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getId()){
+            case R.id.lv_sort_list:
+                position = i;
+                name = mcList.get(i).getName();
+                showRenameMcDialog();
+                break;
+        }
+        return true;
+    }
+
+    private String name ="";
+    private void showRenameMcDialog(){
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_rename, null);
+        final EditText editText = (EditText)view.findViewById(R.id.dialog_rename);
+        editText.setText(name);
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("更新名字")
+                .setView(view)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        name = editText.getText().toString().trim();
+                        startUpdateMc();
+                    }
+                }).create();
+        alertDialog.show();
     }
 
     @Override

@@ -54,7 +54,8 @@ public class InsertScImp implements IInsertSc{
 
         String url = NetConfig.SERVICE + NetConfig.INSERT_SC;
         url = url + "name=" + name
-                +"&image=" + image;
+                +"&image=" + image
+                +"&mcId=" + sc.getMcId();
         Log.d("url",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

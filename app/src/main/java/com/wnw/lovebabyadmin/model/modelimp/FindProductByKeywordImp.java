@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +44,15 @@ public class FindProductByKeywordImp implements IFindProductByKeyword{
      * */
 
     private void sendRequestWithVolley(String keyword){
+        String keyWord = "";
+        try {
+            keyWord = URLEncoder.encode(keyword, "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         String url = NetConfig.SERVICE+ NetConfig.FIND_PRODUCT_BY_KEYWORD
-                +"keyWord="+keyword;
+                +"keyWord=" + keyWord;
         LogUtil.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

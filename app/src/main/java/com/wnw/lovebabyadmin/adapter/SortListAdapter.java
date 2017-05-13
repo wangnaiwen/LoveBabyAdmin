@@ -29,6 +29,10 @@ public class SortListAdapter extends BaseAdapter {
         this.mcList = mcs;
     }
 
+    public void setMcList(List<Mc> mcList){
+        this.mcList = mcList;
+    }
+
     @Override
     public int getCount() {
         return mcList.size();

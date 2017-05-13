@@ -52,8 +52,9 @@ public class UpdateScImp implements IUpdateSc{
         }
 
         String url = NetConfig.SERVICE + NetConfig.UPDATE_SC;
-        url = url + "name=" + name
-                +"&image=" + image;
+        url = url +"id="+ sc.getId()+ "&name=" + name
+                +"&image=" + image
+                +"&mcId=" + sc.getMcId();
         Log.d("url",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
