@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wnw.lovebabyadmin.R;
 import com.wnw.lovebabyadmin.domain.Article;
 
@@ -30,6 +31,7 @@ public class ArticleDetailActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_article_detail);
         getArticle();
         initView();
+
     }
 
     private void getArticle(){

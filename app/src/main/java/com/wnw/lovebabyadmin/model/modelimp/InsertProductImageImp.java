@@ -10,8 +10,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wnw.lovebabyadmin.config.NetConfig;
-import com.wnw.lovebabyadmin.domain.Product;
-import com.wnw.lovebabyadmin.model.imodel.IInsertProduct;
+import com.wnw.lovebabyadmin.domain.ProductImage;
+import com.wnw.lovebabyadmin.model.imodel.IInsertProductImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,19 +19,19 @@ import org.json.JSONObject;
 import java.net.URLEncoder;
 
 /**
- * Created by wnw on 2017/5/12.
+ * Created by wnw on 2017/5/25.
  */
 
-public class InsertProductImp implements IInsertProduct{
+public class InsertProductImageImp implements IInsertProductImage {
     private Context context;
-    private ProductInsertListener productInsertListener;
-    private int id;
+    private InsertProductImageListener insertProductImageListener;
+    private boolean isSuccess;
 
     @Override
-    public void insertProduct(Context context, Product product, ProductInsertListener productInsertListener) {
+    public void insertProductImage(Context context, ProductImage image, InsertProductImageListener insertProductImageListener) {
         this.context = context;
-        this.productInsertListener = productInsertListener;
-        sendRequestWithVolley(product);
+        this.insertProductImageListener = insertProductImageListener;
+        sendRequestWithVolley(image);
     }
 
     /**
@@ -39,32 +39,18 @@ public class InsertProductImp implements IInsertProduct{
      * 这里要对Http进行Encode
      * */
 
-    private void sendRequestWithVolley(Product product){
-        String numbering = "";
-        String name = "";
-        String brand = "";
-        String description = "";
-        String coverImg = "";
+    private void sendRequestWithVolley(ProductImage image){
+        String path = "";
         try {
-            numbering = URLEncoder.encode(product.getNumbering(), "UTF-8");
-            name = URLEncoder.encode(product.getName(), "UTF-8");
-            brand = URLEncoder.encode(product.getBrand(), "UTF-8");
-            description = URLEncoder.encode(product.getDescription(), "UTF-8");
-            coverImg = URLEncoder.encode(product.getCoverImg(), "UTF-8");
+            path = URLEncoder.encode(image.getPath(), "UTF-8");
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        String url = NetConfig.SERVICE + NetConfig.INSERT_PRODUCT;
-        url = url +"name=" + name
-                +"&brand=" + brand
-                +"&numbering=" + numbering
-                + "&description=" + description
-                + "&coverImg=" + coverImg
-                + "&retailPrice=" + product.getRetailPrice()
-                + "&standardPrice=" + product.getStandardPrice()
-                + "&scId=" + product.getScId()
-                + "&count=" + product.getCount();
+        String url = NetConfig.SERVICE + NetConfig.INSERT_PRODUCT_IMAGE;
+        url = url +"id=" + image.getId()
+                +"&productId=" + image.getProductId()
+                +"&path=" + path;
         Log.d("url",url );
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -84,7 +70,7 @@ public class InsertProductImp implements IInsertProduct{
     private void parseNetUserWithJSON(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);
-            id = jsonObject.getInt("insertProduct");
+            isSuccess = jsonObject.getBoolean("insertProductImage");
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -99,8 +85,8 @@ public class InsertProductImp implements IInsertProduct{
      */
 
     private void retData(){
-        if(productInsertListener != null){
-            productInsertListener.complete(id);
+        if(insertProductImageListener != null){
+            insertProductImageListener.complete(isSuccess);
         }
     }
 }

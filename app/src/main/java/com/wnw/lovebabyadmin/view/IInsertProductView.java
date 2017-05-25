@@ -6,5 +6,5 @@ package com.wnw.lovebabyadmin.view;
 
 public interface IInsertProductView {
     void showDialog();
-    void showInsertProductResult(boolean isSuccess);
+    void showInsertProductResult(int id);
 }

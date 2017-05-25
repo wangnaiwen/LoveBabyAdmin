@@ -36,9 +36,9 @@ public class InsertProductPresenter {
         if(insertProduct != null) {
             insertProduct.insertProduct(context, product, new IInsertProduct.ProductInsertListener() {
                 @Override
-                public void complete(boolean isSuccess) {
+                public void complete(int id) {
                     if (insertProductView != null){
-                        insertProductView.showInsertProductResult(isSuccess);
+                        insertProductView.showInsertProductResult(id);
                     }
                 }
             });

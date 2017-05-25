@@ -18,6 +18,6 @@ public interface IInsertProduct {
      * 加载数据完成的回调
      * */
     interface ProductInsertListener{
-        void complete(boolean isSuccess);
+        void complete(int id);
     }
 }

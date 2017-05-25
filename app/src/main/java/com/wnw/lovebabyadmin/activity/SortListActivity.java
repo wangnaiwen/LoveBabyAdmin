@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.wnw.lovebabyadmin.R;
 import com.wnw.lovebabyadmin.adapter.SortListAdapter;
+import com.wnw.lovebabyadmin.bean.SerializableMap;
 import com.wnw.lovebabyadmin.domain.Mc;
 import com.wnw.lovebabyadmin.domain.Sc;
 import com.wnw.lovebabyadmin.fragment.SortListFragment;
@@ -34,6 +35,7 @@ import com.wnw.lovebabyadmin.view.IFindScByMcIdView;
 import com.wnw.lovebabyadmin.view.IInsertMcView;
 import com.wnw.lovebabyadmin.view.IUpdateMcView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,7 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
     private LinearLayout normalView;
     private TextView noSortTv;
 
-    private Map map = new HashMap();
+    private Map<String, List<Sc>> map = new HashMap<>();
     private List<Mc> mcList = new ArrayList<>();
 
     private ListView sortListLv;
@@ -87,7 +89,17 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_product) {
+            Intent intent = new Intent(this, InsertProductActivity.class);
 
+            //传递数据
+            final SerializableMap myMap=new SerializableMap();
+            myMap.setMap(map);//将map数据添加到封装的myMap中
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("map", myMap);
+            intent.putExtra("mcList", (Serializable)mcList);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             return true;
         }else if (id == R.id.action_edit_special_price) {
 
@@ -99,10 +111,20 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
             showInsertMcDialog();
             return true;
         }else if (id == R.id.action_add_sc) {
-
+            Intent intent = new Intent(this, InsertScActivity.class);
+            intent.putExtra("mcList", (Serializable)mcList);
+            startActivityForResult(intent, 1);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            reFindMcs();
+        }
     }
 
     private void initView(){
@@ -195,9 +217,9 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void showScs(List<Sc> scs) {
         if(scs == null){
-            map.put(mcList.get(pos), new ArrayList<>());
+            map.put(mcList.get(pos).getName(), new ArrayList<Sc>());
         }else {
-            map.put(mcList.get(pos), scs);
+            map.put(mcList.get(pos).getName(), scs);
         }
         Log.d("wnw", pos+" " + mcList.size());
         pos ++;
@@ -298,7 +320,7 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
         int length = mcList.size();
         for (int i = 0 ; i < length; i++){
             SortListFragment sortListFragment = new SortListFragment();
-            sortListFragment.setScList((List<Sc>) map.get(mcList.get(i)));
+            sortListFragment.setScList(map.get(mcList.get(i).getName()));
             fragmentList.add(sortListFragment);
         }
     }

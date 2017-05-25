@@ -128,4 +128,8 @@ public class NetConfig {
     //search
     public final static String FIND_SEARCH_BY_USER_ID = "findSearchByUserId?";
 
+
+    //product image
+    public final static String FIND_PRODUCT_IMAGES_BY_PRODUCT_ID = "findImagesByProductId?";
+    public final static String INSERT_PRODUCT_IMAGE = "insertProductImage?";
 }

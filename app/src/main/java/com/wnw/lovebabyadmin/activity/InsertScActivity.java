@@ -9,10 +9,17 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +30,17 @@ import com.android.volley.toolbox.Volley;
 import com.wnw.lovebabyadmin.R;
 import com.wnw.lovebabyadmin.config.NetConfig;
 import com.wnw.lovebabyadmin.domain.Article;
+import com.wnw.lovebabyadmin.domain.Mc;
+import com.wnw.lovebabyadmin.domain.Sc;
 import com.wnw.lovebabyadmin.net.NetUtil;
 import com.wnw.lovebabyadmin.presenter.InsertArticlePresenter;
+import com.wnw.lovebabyadmin.presenter.InsertMcPresenter;
+import com.wnw.lovebabyadmin.presenter.InsertScPresenter;
 import com.wnw.lovebabyadmin.upload.ImageForm;
 import com.wnw.lovebabyadmin.upload.ImageUploadRequest;
 import com.wnw.lovebabyadmin.upload.ResponseListener;
 import com.wnw.lovebabyadmin.view.IInsertArticleView;
+import com.wnw.lovebabyadmin.view.IInsertScView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,22 +48,24 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wnw on 2017/5/9.
+ * Created by wnw on 2017/5/23.
  */
 
-public class InsertArticleActivity extends Activity implements View.OnClickListener,
-        IInsertArticleView{
+public class InsertScActivity extends Activity implements View.OnClickListener,
+        IInsertScView {
 
     private ImageView back;
     private TextView finishTv;
-    private EditText authorTv;
-    private EditText titleTv;
-    private EditText contentTv;
+    private EditText nameTv;
+    private RelativeLayout pickMcRl;
+    private TextView mcNameTv;
     private ImageView articleImg;
 
-    private Article article;
+    private List<Mc> mcList;
+    private int selectedMcId = 0;
+    private Sc sc;
 
-    private InsertArticlePresenter insertArticlePresenter;
+    private InsertScPresenter insertScPresenter;
 
     String path = null;                 //判断是否更改图片的依据
     private Bitmap myBitmapImage;
@@ -59,26 +73,35 @@ public class InsertArticleActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_article);
+        setContentView(R.layout.activity_insert_sc);
+        getMcList();
         initView();
         initPresenter();
+    }
+
+    private void getMcList(){
+        Intent intent = getIntent();
+        mcList = (List<Mc>) intent.getSerializableExtra("mcList");
     }
 
     private void initView() {
         back = (ImageView) findViewById(R.id.back);
         finishTv = (TextView) findViewById(R.id.tv_finish);
-        authorTv = (EditText) findViewById(R.id.et_author);
-        titleTv = (EditText) findViewById(R.id.et_title);
-        contentTv = (EditText) findViewById(R.id.et_content);
-        articleImg = (ImageView) findViewById(R.id.img_article_icon);
+        nameTv = (EditText) findViewById(R.id.et_sc_name);
+        pickMcRl = (RelativeLayout)findViewById(R.id.rl_pick_mc);
+        mcNameTv = (TextView)findViewById(R.id.tv_mc_name);
+        articleImg = (ImageView) findViewById(R.id.img_sc_icon);
 
+        pickMcRl.setOnClickListener(this);
         back.setOnClickListener(this);
         finishTv.setOnClickListener(this);
         articleImg.setOnClickListener(this);
+
+        mcNameTv.setText(mcList.get(selectedMcId).getName());
     }
 
     private void initPresenter(){
-        insertArticlePresenter = new InsertArticlePresenter(this,this);
+        insertScPresenter = new InsertScPresenter(this,this);
     }
 
     ProgressDialog dialog = null;
@@ -103,30 +126,33 @@ public class InsertArticleActivity extends Activity implements View.OnClickListe
     }
 
     @Override
-    public void showInsertArticleResult(boolean isSuccess) {
+    public void showInsertScResult(boolean isSuccess) {
         dismissDialogs();
         if (isSuccess){
             //上传成功
-            Toast.makeText(InsertArticleActivity.this,"文章发表成功",Toast.LENGTH_LONG).show();
+            Toast.makeText(InsertScActivity.this,"插入次类别成功",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }else {
             //上传失败
-            Toast.makeText(InsertArticleActivity.this,"文章发表失败",Toast.LENGTH_LONG).show();
+            Toast.makeText(InsertScActivity.this,"插入次类别失败",Toast.LENGTH_LONG).show();
         }
     }
 
-    private void startInsertArticle(){
+
+    private void startInsertSc(){
         if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
-            Toast.makeText(InsertArticleActivity.this,"请检查网络",Toast.LENGTH_LONG).show();
+            Toast.makeText(InsertScActivity.this,"请检查网络",Toast.LENGTH_LONG).show();
         }else {
             uploadAvatar(myBitmapImage);
         }
     }
 
     //插入文章
-    private void insertArticle() {
-        insertArticlePresenter.insertArticle(article);
+    private void insertSc() {
+        insertScPresenter.insertSc(sc);
     }
 
     //上传头像
@@ -142,16 +168,16 @@ public class InsertArticleActivity extends Activity implements View.OnClickListe
             Request request = new ImageUploadRequest(NetConfig.IMAGE_UPLOAD, imageFormList, new ResponseListener() {
                 @Override
                 public void onResponse(String response) {
-                    //得到返回的文章封面的链接
-                    article.setCoverImg(NetConfig.IMAGE_PATH + response);
-                    insertArticle();
+                    //得到返回的次累呗封面的链接
+                    sc.setImage(NetConfig.IMAGE_PATH + response);
+                    insertSc();
                 }
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     dismissDialogs();
                     error.printStackTrace();
-                    Toast.makeText(InsertArticleActivity.this, "上传图片失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(InsertScActivity.this, "上传图片失败", Toast.LENGTH_LONG).show();
                 }
             });
             RequestQueue queue = Volley.newRequestQueue(this);
@@ -170,24 +196,22 @@ public class InsertArticleActivity extends Activity implements View.OnClickListe
                 break;
             case R.id.tv_finish:
                 //uploadImg();
-                if (authorTv.getText().toString().trim().isEmpty()){
-                    authorTv.setHint("请输入作者的名字");
-                }else if (titleTv.getText().toString().trim().isEmpty()){
-                    titleTv.setHint("请输入文章标题的名字");
-                }else if (contentTv.getText().toString().trim().isEmpty()){
-                    contentTv.setHint("请输入微信文章内容对应的链接");
+                if (nameTv.getText().toString().trim().isEmpty()){
+                    nameTv.setHint("请输入类别名称");
                 }else if (path == null){
-                    Toast.makeText(InsertArticleActivity.this, "请选择文章封面", Toast.LENGTH_LONG).show();
+                    Toast.makeText(InsertScActivity.this, "请选择类别封面", Toast.LENGTH_LONG).show();
                 }else{
-                    //开始插入文章
-                    article = new Article();
-                    article.setAuthor(authorTv.getText().toString().trim());
-                    article.setTitle(titleTv.getText().toString().trim());
-                    article.setContent(contentTv.getText().toString().trim());
-                    startInsertArticle();
+                    //开始插入类别
+                    sc = new Sc();
+                    sc.setName(nameTv.getText().toString().trim());
+                    sc.setMcId(mcList.get(selectedMcId).getId());
+                    startInsertSc();
                 }
                 break;
-            case R.id.img_article_icon:
+            case R.id.rl_pick_mc:
+                showMcDialog();
+                break;
+            case R.id.img_sc_icon:
                 //获取系统选择图片intent
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
@@ -195,6 +219,30 @@ public class InsertArticleActivity extends Activity implements View.OnClickListe
                 startActivityForResult(intent, 1);
                 break;
         }
+    }
+
+    AlertDialog alertDialog = null;
+    private void showMcDialog(){
+        View view = LayoutInflater.from(this).inflate(R.layout.list_mc, null);
+        ListView mcLv = (ListView)view.findViewById(R.id.lv_mc);
+        final List<String> mcNameList = new ArrayList<String>();
+        int length = mcList.size();
+        for (int i = 0 ; i < length; i++){
+            mcNameList.add(mcList.get(i).getName());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mcNameList);
+        mcLv.setAdapter(arrayAdapter);
+        mcLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedMcId = i;
+                mcNameTv.setText(mcNameList.get(i));
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog = new AlertDialog.Builder(this)
+                .setView(view).create();
+        alertDialog.show();
     }
 
     @Override
