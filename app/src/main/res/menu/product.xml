@@ -7,16 +7,6 @@
         android:title="添加商品"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_edit_hot_sale"
-        android:orderInCategory="100"
-        android:title="热门商品"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_edit_special_price"
-        android:orderInCategory="100"
-        android:title="特价商品"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_add_mc"
         android:orderInCategory="100"
         android:title="添加主类"

@@ -38,7 +38,7 @@ public class UpdateProductPresenter {
                 @Override
                 public void complete(boolean isSuccess) {
                     if (iUpdateProductView != null){
-                        iUpdateProductView.showUpdatePrductResult(isSuccess);
+                        iUpdateProductView.showUpdateProductResult(isSuccess);
                     }
                 }
             });

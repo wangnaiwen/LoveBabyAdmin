@@ -72,6 +72,8 @@ public class NetConfig {
     public final static String FIND_DEAL_BY_ORDER_ID = "findDealByOrderId?";
     public final static String FIND_INCOME_BY_SHOP_ID = "findIncomeByShopId?";
     public final static String FIND_INCOME_BY_INVITEE = "findIncomeByInvitee?";
+    public final static String FIND_SUM_PRICE = "findSumPrice";
+
 
     //user wallet
     public final static String UPDATE_WALLET_PASSWORD = "updateWalletPassword?";
@@ -93,6 +95,7 @@ public class NetConfig {
     public final static String FIND_PRODUCT_BY_KEYWORD = "findProductByKeyword?";
     public final static String UPDATE_PRODUCT = "updateProduct?";
     public final static String INSERT_PRODUCT = "insertProduct?";
+    public final static String DELETE_PRODUCT = "deleteProduct?";
 
     //pr
     public final static String FIND_PR_BY_DEAL_ID = "findPrsByDealId?";
@@ -132,4 +135,11 @@ public class NetConfig {
     //product image
     public final static String FIND_PRODUCT_IMAGES_BY_PRODUCT_ID = "findImagesByProductId?";
     public final static String INSERT_PRODUCT_IMAGE = "insertProductImage?";
+
+    //hot sale
+    public final static String INSERT_HOTSALE = "insertHotSale?";
+    public final static String INSERT_SPECIAL_PRICE = "insertSpecialPrice?";
+
+
+
 }

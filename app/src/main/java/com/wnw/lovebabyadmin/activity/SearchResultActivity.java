@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.wnw.lovebabyadmin.R;
 import com.wnw.lovebabyadmin.adapter.ProductAdapter;
+import com.wnw.lovebabyadmin.domain.Pr;
 import com.wnw.lovebabyadmin.domain.Product;
 import com.wnw.lovebabyadmin.net.NetUtil;
 import com.wnw.lovebabyadmin.presenter.FindProductByKeyPresenter;
@@ -88,7 +89,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
     private void showDialogs(){
         if(dialog == null){
             dialog = new ProgressDialog(this);
-            dialog.setMessage("订单正在提交中...");
+            dialog.setMessage("正在努力中...");
         }
         if(!dialog.isShowing()){
             dialog.show();
@@ -146,15 +147,42 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         }
     }
 
+    private int position = 0;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
             case R.id.gv_product_list:
+                position = i;
                 Intent intent = new Intent(this, EditProductActivity.class);
                 intent.putExtra("product", productList.get(i));
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            boolean isDelete = data.getBooleanExtra("isDelete", false);
+            if (isDelete){
+                productList.remove(position);
+                if (productList.size() == 0){
+                    noProductTv.setVisibility(View.VISIBLE);
+                    productGv.setVisibility(View.GONE);
+                }else {
+                    noProductTv.setVisibility(View.GONE);
+                    productGv.setVisibility(View.VISIBLE);
+                    productAdapter.setDatas(productList);
+                    productAdapter.notifyDataSetChanged();
+                }
+            }else {
+                productList.set(position, (Product) data.getSerializableExtra("product"));
+                noProductTv.setVisibility(View.GONE);
+                productGv.setVisibility(View.VISIBLE);
+                productAdapter.setDatas(productList);
+                productAdapter.notifyDataSetChanged();
+            }
         }
     }
 

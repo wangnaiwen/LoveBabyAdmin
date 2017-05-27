@@ -112,9 +112,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tv_send_order:
-                Intent intent = new Intent(this, SendOrderActivity.class);
+                Intent intent = new Intent(this, OrderActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                /*Intent intent = new Intent(this, SendOrderActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);*/
                 break;
             case R.id.tv_review_store:
                 Intent intent1 = new Intent(this, ReviewStoreActivity.class);

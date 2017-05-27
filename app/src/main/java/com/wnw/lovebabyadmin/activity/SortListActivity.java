@@ -101,12 +101,6 @@ public class SortListActivity extends AppCompatActivity implements View.OnClickL
             startActivityForResult(intent, 1);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             return true;
-        }else if (id == R.id.action_edit_special_price) {
-
-            return true;
-        }else if (id == R.id.action_edit_hot_sale) {
-
-            return true;
         }else if (id == R.id.action_add_mc) {
             showInsertMcDialog();
             return true;

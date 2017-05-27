@@ -80,6 +80,7 @@ public class FindProductByScIdImpl implements IFindProductByScIdModel{
                     product.setCoverImg(object.getString("coverImg"));
                     product.setNumbering(object.getString("numbering"));
                     product.setBrand(object.getString("brand"));
+                    product.setCount(object.getInt("count"));
                     productList.add(product);
                 }
             }else {

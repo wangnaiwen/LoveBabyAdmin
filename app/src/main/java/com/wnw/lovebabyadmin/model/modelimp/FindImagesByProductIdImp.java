@@ -43,7 +43,7 @@ public class FindImagesByProductIdImp implements IFindProductImagesByProductId {
     private void sendRequestWithVolley(int productId){
         String url = NetConfig.SERVICE+NetConfig.FIND_PRODUCT_IMAGES_BY_PRODUCT_ID
                 +"productId=" + productId;
-
+        Log.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

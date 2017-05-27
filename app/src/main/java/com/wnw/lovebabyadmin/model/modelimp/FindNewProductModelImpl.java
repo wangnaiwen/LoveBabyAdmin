@@ -75,6 +75,7 @@ public class FindNewProductModelImpl implements IFindNewProductModel {
                     product.setDescription(object.getString("description"));
                     product.setRetailPrice(object.getLong("retailPrice"));
                     product.setStandardPrice(object.getLong("standardPrice"));
+                    product.setCount(object.getInt("count"));
                     returnData.add(product);
                 }
             }else {

@@ -71,6 +71,7 @@ public class FindProductByIdImpl implements IFindProductByIdModel {
                 returnData.setCoverImg(resultObject.getString("coverImg"));
                 returnData.setNumbering(resultObject.getString("numbering"));
                 returnData.setBrand(resultObject.getString("brand"));
+                returnData.setCount(resultObject.getInt("count"));
             }
         }catch (JSONException e){
             e.printStackTrace();

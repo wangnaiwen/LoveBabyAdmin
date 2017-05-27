@@ -39,6 +39,7 @@
         <activity android:name=".activity.SearchResultActivity"/>
         <activity android:name=".activity.InsertScActivity"/>
         <activity android:name=".activity.InsertProductActivity"/>
+        <activity android:name=".activity.OrderActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />

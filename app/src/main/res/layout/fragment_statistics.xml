@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:id="@+id/sw_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <lecho.lib.hellocharts.view.ColumnChartView
+                android:id="@+id/column_chart_month"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" >
+            </lecho.lib.hellocharts.view.ColumnChartView>
+
+            <lecho.lib.hellocharts.view.ColumnChartView
+                android:id="@+id/column_chart_day"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginTop="50dp">
+            </lecho.lib.hellocharts.view.ColumnChartView>
+        </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/tv_null"/>
+</LinearLayout>

@@ -163,15 +163,42 @@ public class ProductListActivity extends Activity implements AdapterView.OnItemC
         }
     }
 
+    private int position = 0;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
             case R.id.gv_product_list:
+                position = i;
                 Intent intent = new Intent(this, EditProductActivity.class);
                 intent.putExtra("product", productList.get(i));
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            boolean isDelete = data.getBooleanExtra("isDelete", false);
+            if (isDelete){
+                productList.remove(position);
+                if (productList.size() == 0){
+                    noProductTv.setVisibility(View.VISIBLE);
+                    productGv.setVisibility(View.GONE);
+                }else {
+                    noProductTv.setVisibility(View.GONE);
+                    productGv.setVisibility(View.VISIBLE);
+                    productAdapter.setDatas(productList);
+                    productAdapter.notifyDataSetChanged();
+                }
+            }else {
+                productList.set(position, (Product) data.getSerializableExtra("product"));
+                noProductTv.setVisibility(View.GONE);
+                productGv.setVisibility(View.VISIBLE);
+                productAdapter.setDatas(productList);
+                productAdapter.notifyDataSetChanged();
+            }
         }
     }
 

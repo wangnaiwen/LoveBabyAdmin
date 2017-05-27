@@ -5,4 +5,6 @@ package com.wnw.lovebabyadmin.view;
  */
 
 public interface IInsertSpecialPriceView {
+    void showDialog();
+    void showInsertSpecialPriceResult(boolean isSuccess);
 }

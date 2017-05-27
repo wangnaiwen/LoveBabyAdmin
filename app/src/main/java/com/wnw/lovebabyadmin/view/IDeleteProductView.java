@@ -5,4 +5,6 @@ package com.wnw.lovebabyadmin.view;
  */
 
 public interface IDeleteProductView {
+    void showDialog();
+    void showDeleteProductResult(boolean isSuccess);
 }

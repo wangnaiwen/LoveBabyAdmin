@@ -6,5 +6,5 @@ package com.wnw.lovebabyadmin.view;
 
 public interface IUpdateProductView {
     void showDialog();
-    void showUpdatePrductResult(boolean isSuccess);
+    void showUpdateProductResult(boolean isSuccess);
 }
