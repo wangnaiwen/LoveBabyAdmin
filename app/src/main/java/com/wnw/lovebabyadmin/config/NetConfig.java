@@ -73,6 +73,7 @@ public class NetConfig {
     public final static String FIND_INCOME_BY_SHOP_ID = "findIncomeByShopId?";
     public final static String FIND_INCOME_BY_INVITEE = "findIncomeByInvitee?";
     public final static String FIND_SUM_PRICE = "findSumPrice";
+    public final static String FIND_PRODUCT_SALE_COUNT = "findProductSaleCount";
 
 
     //user wallet

@@ -15,8 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wnw.lovebabyadmin.R;
+import com.wnw.lovebabyadmin.domain.ProductSaleCount;
 import com.wnw.lovebabyadmin.net.NetUtil;
+import com.wnw.lovebabyadmin.presenter.FindProductSaleCountPresenter;
 import com.wnw.lovebabyadmin.presenter.FindSumPricePresenter;
+import com.wnw.lovebabyadmin.view.IFindProductSaleCountView;
 import com.wnw.lovebabyadmin.view.IFindSumPriceView;
 
 import java.text.SimpleDateFormat;
@@ -37,7 +40,8 @@ import lecho.lib.hellocharts.view.ColumnChartView;
  * Created by wnw on 2017/5/27.
  */
 
-public class StatisticsFragment extends Fragment implements View.OnClickListener, IFindSumPriceView{
+public class StatisticsFragment extends Fragment implements View.OnClickListener,
+        IFindSumPriceView, IFindProductSaleCountView{
     private View view;
     private Context context;
     private LayoutInflater inflater;
@@ -46,11 +50,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     private TextView nullTv;
     private ColumnChartView monthChartView;
     private ColumnChartView datChartView;
+    private ColumnChartView productCountChartView;
 
     private ArrayList<Integer> months;
     private ArrayList<Integer> days;
 
     private FindSumPricePresenter findSumPricePresenter;
+    private FindProductSaleCountPresenter findProductSaleCountPresenter;
+
+    private List<ProductSaleCount> productSaleCountList;
 
     @Nullable
     @Override
@@ -61,6 +69,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         initView();
         initPresenter();
         findSumPrice();
+        findProductSaleCount();
         return view;
     }
 
@@ -69,12 +78,14 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         nullTv = (TextView)view.findViewById(R.id.tv_null);
         monthChartView = (ColumnChartView)view.findViewById(R.id.column_chart_month);
         datChartView = (ColumnChartView)view.findViewById(R.id.column_chart_day);
+        productCountChartView = (ColumnChartView)view.findViewById(R.id.column_chart_product_count);
 
         nullTv.setOnClickListener(this);
     }
 
     private void initPresenter(){
         findSumPricePresenter = new FindSumPricePresenter(context, this);
+        findProductSaleCountPresenter = new FindProductSaleCountPresenter(context, this);
     }
 
     private void findSumPrice(){
@@ -84,6 +95,16 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             nullTv.setVisibility(View.VISIBLE);
         }else {
             findSumPricePresenter.findSumPrice();
+        }
+    }
+
+    private void findProductSaleCount(){
+        if (NetUtil.getNetworkState(context) == NetUtil.NETWORN_NONE){
+            Toast.makeText(context, "请检查网络", Toast.LENGTH_SHORT).show();
+            normalView.setVisibility(View.GONE);
+            nullTv.setVisibility(View.VISIBLE);
+        }else {
+            findProductSaleCountPresenter.findProductSaleCount();
         }
     }
 
@@ -116,6 +137,16 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         generateDaysData();
     }
 
+    @Override
+    public void showProductSaleCount(List<ProductSaleCount> saleCounts) {
+        if (saleCounts == null){
+
+        }else {
+            productSaleCountList = saleCounts;
+            generateProductCountData();
+        }
+    }
+
     private void generateMonthsData(){
 
         List<String> nameList = new ArrayList<>();
@@ -123,7 +154,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         //最近七天
         int length = months.size();
-        ca1.add(Calendar.MONTH, -length);// 月份减1
+        ca1.add(Calendar.MONTH, -(length+1));// 月份减1
         for (int i = 1; i <= length; i++) {
             ca1.add(Calendar.YEAR,0);
             ca1.add(Calendar.MONTH,+1);// 月份减1
@@ -147,7 +178,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             //循环所有柱子（list）
             for (int j = 0; j < numSubcolumns; ++j) {
                 //创建一个柱子，然后设置值和颜色，并添加到list中
-                values.add(new SubcolumnValue(months.get(i)/100, ChartUtils.pickColor()));
+                float m = ((float)months.get(i))/100;
+                values.add(new SubcolumnValue(m, ChartUtils.pickColor()));
                 //设置X轴的柱子所对应的属性名称
                 axisXValues.add(new AxisValue(i).setLabel(nameList.get(i)));
             }
@@ -163,9 +195,9 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //设置Columns添加到Data中
         ColumnChartData data = new ColumnChartData(columns);
         //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("日期").setHasTiltedLabels(true).setMaxLabelChars(8));
+        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("12个月销售额统计图").setHasTiltedLabels(true).setMaxLabelChars(8));
         //属性值含义同X轴
-        data.setAxisYLeft(new Axis().setHasLines(true).setName("收入").setTextColor(Color.BLACK).setMaxLabelChars(5));
+        data.setAxisYLeft(new Axis().setHasLines(true).setName("收入(元)").setTextColor(Color.BLACK).setMaxLabelChars(5));
         //最后将所有值显示在View中
         monthChartView.setColumnChartData(data);
 
@@ -178,7 +210,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //最近三十天
         //ca.setTime(new Date()); // 设置时间为当前时间
         int length = days.size();
-        ca.add(Calendar.DATE, -length);// 日期减1
+        ca.add(Calendar.DATE, -(length+1));// 日期减1
         for (int i = 1; i <= length; i++) {
             ca.add(Calendar.YEAR,0); // 年份减1
             ca.add(Calendar.MONTH,0);// 月份减1
@@ -203,7 +235,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             //循环所有柱子（list）
             for (int j = 0; j < numSubcolumns; ++j) {
                 //创建一个柱子，然后设置值和颜色，并添加到list中
-                values.add(new SubcolumnValue(days.get(i)/100, ChartUtils.pickColor()));
+                float d = ((float)days.get(i))/100;
+                values.add(new SubcolumnValue(d, ChartUtils.pickColor()));
                 //设置X轴的柱子所对应的属性名称
                 axisXValues.add(new AxisValue(i).setLabel(nameList.get(i)));
             }
@@ -219,11 +252,51 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //设置Columns添加到Data中
         ColumnChartData data = new ColumnChartData(columns);
         //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("月份").setHasTiltedLabels(true).setMaxLabelChars(8));
+        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("30天销售额统计图").setHasTiltedLabels(true).setMaxLabelChars(8));
         //属性值含义同X轴
-        data.setAxisYLeft(new Axis().setHasLines(true).setName("收入").setTextColor(Color.BLACK).setMaxLabelChars(5));
+        data.setAxisYLeft(new Axis().setHasLines(true).setName("收入（元）").setTextColor(Color.BLACK).setMaxLabelChars(5));
         //最后将所有值显示在View中
         datChartView.setColumnChartData(data);
+
+    }
+
+    private void generateProductCountData(){
+        //每个集合显示几条柱子
+        int numSubcolumns = 1;
+        //显示多少个集合
+        int numColumns = productSaleCountList.size();
+        //保存所有的柱子
+        List<Column> columns = new ArrayList<Column>();
+        //保存每个竹子的值
+        List<SubcolumnValue> values;
+        List<AxisValue> axisXValues = new ArrayList<AxisValue>();
+        //对每个集合的柱子进行遍历
+        for (int i = 0; i < numColumns; i ++) {
+            values = new ArrayList<SubcolumnValue>();
+            //循环所有柱子（list）
+            for (int j = 0; j < numSubcolumns; ++j) {
+                //创建一个柱子，然后设置值和颜色，并添加到list中
+                values.add(new SubcolumnValue(productSaleCountList.get(i).getCount(), ChartUtils.pickColor()));
+                //设置X轴的柱子所对应的属性名称
+                axisXValues.add(new AxisValue(i).setLabel(productSaleCountList.get(i).getName()));
+            }
+            //将每个属性的拥有的柱子，添加到Column中
+            Column column = new Column(values);
+            //是否显示每个柱子的Lable
+            column.setHasLabels(true);
+            //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
+            column.setHasLabelsOnlyForSelected(false);
+            //将每个属性得列全部添加到List中
+            columns.add(column);
+        }
+        //设置Columns添加到Data中
+        ColumnChartData data = new ColumnChartData(columns);
+        //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
+        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("产品销量统计图").setHasTiltedLabels(true).setMaxLabelChars(8));
+        //属性值含义同X轴
+        data.setAxisYLeft(new Axis().setHasLines(true).setName("数量（件）").setTextColor(Color.BLACK).setMaxLabelChars(5));
+        //最后将所有值显示在View中
+        productCountChartView.setColumnChartData(data);
 
     }
 

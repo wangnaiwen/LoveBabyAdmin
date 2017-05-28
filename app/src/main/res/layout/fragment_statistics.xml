@@ -14,15 +14,28 @@
             <lecho.lib.hellocharts.view.ColumnChartView
                 android:id="@+id/column_chart_month"
                 android:layout_width="match_parent"
-                android:layout_height="500dp" >
+                android:layout_height="500dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
             </lecho.lib.hellocharts.view.ColumnChartView>
 
             <lecho.lib.hellocharts.view.ColumnChartView
                 android:id="@+id/column_chart_day"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
             </lecho.lib.hellocharts.view.ColumnChartView>
+            <lecho.lib.hellocharts.view.ColumnChartView
+                android:id="@+id/column_chart_product_count"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+            </lecho.lib.hellocharts.view.ColumnChartView>
+
         </LinearLayout>
     </ScrollView>
     <include layout="@layout/tv_null"/>
