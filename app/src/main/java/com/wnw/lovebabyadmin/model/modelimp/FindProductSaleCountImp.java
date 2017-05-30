@@ -39,6 +39,7 @@ public class FindProductSaleCountImp implements IFindProductSaleCountImp {
 
     private void sendRequestWithVolley(){
         String url = NetConfig.SERVICE + NetConfig.FIND_PRODUCT_SALE_COUNT;
+        Log.d("url", url);
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

@@ -27,7 +27,7 @@
              android:textColor="#ffff"
              android:textSize="25sp"
              android:gravity="center"
-             android:text="订单发货" />
+             android:text="订单管理" />
          <TextView
              android:id="@+id/tv_review_store"
              android:layout_width="match_parent"

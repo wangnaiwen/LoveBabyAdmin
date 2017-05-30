@@ -187,6 +187,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             Column column = new Column(values);
             //是否显示每个柱子的Lable
             column.setHasLabels(true);
+
             //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
             column.setHasLabelsOnlyForSelected(false);
             //将每个属性得列全部添加到List中
@@ -297,7 +298,6 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         data.setAxisYLeft(new Axis().setHasLines(true).setName("数量（件）").setTextColor(Color.BLACK).setMaxLabelChars(5));
         //最后将所有值显示在View中
         productCountChartView.setColumnChartData(data);
-
     }
 
     @Override

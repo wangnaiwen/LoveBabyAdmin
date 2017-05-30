@@ -219,9 +219,8 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                 shoppingCarItem.setProductId(productList.get(i).getId());
                 shoppingCarItem.setGoodsNum(dealList.get(i).getProductCount());
                 shoppingCarItem.setGoodsImg(productList.get(i).getCoverImg());
-                shoppingCarItem.setGoodsPrice((int)productList.get(i).getRetailPrice());
+                shoppingCarItem.setGoodsPrice((int)dealList.get(i).getPrice());
                 shoppingCarItem.setGoodsTitle(productList.get(i).getName());
-
                 shoppingCarItemList.add(shoppingCarItem);
 
                 sumPrice = sumPrice + (int)dealList.get(i).getSumPrice();

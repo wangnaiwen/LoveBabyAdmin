@@ -73,6 +73,7 @@ public class FindDealByOrderIdModelImpl implements IFindDealByOrderIdModel {
                     deal.setProductCount(object.getInt("productCount"));
                     deal.setSumPrice(object.getLong("sumPrice"));
                     deal.setProductName(object.getString("productName"));
+                    deal.setPrice(object.getLong("price"));
                     returnData.add(deal);
                 }
             }else {
