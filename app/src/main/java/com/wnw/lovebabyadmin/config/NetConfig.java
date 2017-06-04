@@ -142,5 +142,9 @@ public class NetConfig {
     public final static String INSERT_SPECIAL_PRICE = "insertSpecialPrice?";
 
 
+    //backup
+    public final static String BACKUP = "backup?";
 
+    //recover
+    public final static String RECOVER = "recover?";
 }

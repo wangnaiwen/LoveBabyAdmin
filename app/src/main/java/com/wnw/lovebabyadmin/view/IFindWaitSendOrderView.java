@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface IFindWaitSendOrderView {
     void showDialog();
-    void showOrders(List<Order> orders);
+    void showOrders(List<Order> orders, List<String> names);
 }

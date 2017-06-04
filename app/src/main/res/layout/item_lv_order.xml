@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="150dp"
     android:background="#ffff"
-    android:padding="15dp"
-    android:layout_margin="15dp">
+    android:padding="15dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp">
@@ -33,4 +32,11 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="创建时间：12017-4-17 13:01:12"/>
+    <TextView
+        android:id="@+id/item_product_name"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="包含产品："
+        android:maxLines="1"
+        android:ellipsize="end"/>
 </LinearLayout>

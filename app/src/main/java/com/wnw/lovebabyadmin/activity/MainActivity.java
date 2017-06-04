@@ -1,5 +1,6 @@
 package com.wnw.lovebabyadmin.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,11 +19,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wnw.lovebabyadmin.R;
+import com.wnw.lovebabyadmin.net.NetUtil;
+import com.wnw.lovebabyadmin.presenter.BackupPresenter;
+import com.wnw.lovebabyadmin.presenter.RecoverPresenter;
 import com.wnw.lovebabyadmin.util.ActivityCollector;
+import com.wnw.lovebabyadmin.view.IBackupView;
+import com.wnw.lovebabyadmin.view.IRecoverView;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener{
+        View.OnClickListener, IBackupView, IRecoverView{
 
     private TextView nameView;    //名称
 
@@ -34,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String name;
 
+    private BackupPresenter backupPresenter;
+    private RecoverPresenter recoverPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActivityCollector.addActivity(this);
         getAdminName();
         initView();
+        initPresenter();
     }
 
     //得到当前登录的Store
@@ -76,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nameView.setText(name);
     }
 
+    private void initPresenter(){
+        backupPresenter = new BackupPresenter(this, this);
+        recoverPresenter = new RecoverPresenter(this, this);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -84,8 +99,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }else if (id == R.id.nav_backup) {
+           startBackup();
+        } else if (id == R.id.nav_recover) {
+            startRecover();
         }
         return true;
+    }
+
+    private void startBackup(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+
+        }else {
+            backupPresenter.backup();
+        }
+    }
+
+    private void startRecover(){
+        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE){
+
+        }else {
+            recoverPresenter.recover();
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        showDialogs();
+    }
+
+    ProgressDialog dialog = null;
+    private void showDialogs(){
+        if(dialog == null){
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("正在努力中...");
+        }
+        dialog.show();
+    }
+
+    private void dismissDialogs(){
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showBackupResult(boolean isSuccess) {
+        dismissDialogs();
+        if (isSuccess){
+            Toast.makeText(this, "备份成功", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "备份失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void showRecoverResult(boolean isSuccess) {
+        dismissDialogs();
+        if (isSuccess){
+            Toast.makeText(this, "还原成功", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "还原失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // 初始化，加载菜单

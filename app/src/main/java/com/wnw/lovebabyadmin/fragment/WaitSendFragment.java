@@ -41,6 +41,7 @@ public class WaitSendFragment extends Fragment implements AdapterView.OnItemClic
 
     private MyOrderAdapter myOrderAdapter;
     private List<Order> orderList = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>();
 
     private FindWaitSendOrderPresenter findWaitSendOrderPresenter;
 
@@ -148,7 +149,7 @@ public class WaitSendFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void showOrders(List<Order> orders) {
+    public void showOrders(List<Order> orders, List<String> names) {
         dismissDialogs();
         if (orders == null){
             noOrder.setVisibility(View.VISIBLE);
@@ -166,6 +167,7 @@ public class WaitSendFragment extends Fragment implements AdapterView.OnItemClic
                     isEnd = true;
                 }
                 orderList.addAll(orders);
+                nameList.addAll(names);
                 setAdapter();
             }
         }
@@ -190,10 +192,11 @@ public class WaitSendFragment extends Fragment implements AdapterView.OnItemClic
 
     private void setAdapter(){
         if (myOrderAdapter == null){
-            myOrderAdapter = new MyOrderAdapter(context, orderList);
+            myOrderAdapter = new MyOrderAdapter(context, orderList, nameList);
             orderLv.setAdapter(myOrderAdapter);
         }else{
             myOrderAdapter.setOrderList(orderList);
+            myOrderAdapter.setNameList(nameList);
             myOrderAdapter.notifyDataSetChanged();
         }
     }

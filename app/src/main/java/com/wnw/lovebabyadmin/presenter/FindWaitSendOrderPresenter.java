@@ -38,9 +38,9 @@ public class FindWaitSendOrderPresenter {
         if(findWaitSendOrder != null) {
             findWaitSendOrder.findWaitOrder(context, type, page, new IFindWaitSendOrder.WaitOrderFindListener() {
                 @Override
-                public void complete(List<Order> orders) {
+                public void complete(List<Order> orders,  List<String> names) {
                     if (findWaitSendOrderView != null){
-                        findWaitSendOrderView.showOrders(orders);
+                        findWaitSendOrderView.showOrders(orders, names);
                     }
                 }
             });
