@@ -196,7 +196,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //设置Columns添加到Data中
         ColumnChartData data = new ColumnChartData(columns);
         //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("12个月销售额统计图").setHasTiltedLabels(true).setMaxLabelChars(8));
+        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("").setHasTiltedLabels(true).setMaxLabelChars(8));
         //属性值含义同X轴
         data.setAxisYLeft(new Axis().setHasLines(true).setName("收入(元)").setTextColor(Color.BLACK).setMaxLabelChars(5));
         //最后将所有值显示在View中
@@ -253,7 +253,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //设置Columns添加到Data中
         ColumnChartData data = new ColumnChartData(columns);
         //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("30天销售额统计图").setHasTiltedLabels(true).setMaxLabelChars(8));
+        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("").setHasTiltedLabels(true).setMaxLabelChars(8));
         //属性值含义同X轴
         data.setAxisYLeft(new Axis().setHasLines(true).setName("收入（元）").setTextColor(Color.BLACK).setMaxLabelChars(5));
         //最后将所有值显示在View中
@@ -293,7 +293,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //设置Columns添加到Data中
         ColumnChartData data = new ColumnChartData(columns);
         //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("产品销量统计图").setHasTiltedLabels(true).setMaxLabelChars(8));
+        data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.BLACK).setName("").setHasTiltedLabels(true).setMaxLabelChars(8));
         //属性值含义同X轴
         data.setAxisYLeft(new Axis().setHasLines(true).setName("数量（件）").setTextColor(Color.BLACK).setMaxLabelChars(5));
         //最后将所有值显示在View中

@@ -236,7 +236,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="次类别封面"
+                android:text="产品封面"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"/>
             <include layout="@layout/divider"/>

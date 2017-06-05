@@ -19,7 +19,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
             </lecho.lib.hellocharts.view.ColumnChartView>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="12个月销售额统计图"
+                android:textSize="12dp"/>
             <lecho.lib.hellocharts.view.ColumnChartView
                 android:id="@+id/column_chart_day"
                 android:layout_width="match_parent"
@@ -28,6 +33,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
             </lecho.lib.hellocharts.view.ColumnChartView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="30天销售额统计图"
+                android:textSize="12dp"/>
             <lecho.lib.hellocharts.view.ColumnChartView
                 android:id="@+id/column_chart_product_count"
                 android:layout_width="match_parent"
@@ -36,7 +47,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
             </lecho.lib.hellocharts.view.ColumnChartView>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="产品销量统计图"
+                android:textSize="12dp"/>
         </LinearLayout>
     </ScrollView>
     <include layout="@layout/tv_null"/>
